@@ -27,7 +27,7 @@ public class CraftTranslateListener implements Listener {
     public void onCraftTranslate(CraftTranslateEvent event) {
         final Craft craft = event.getCraft();
         final CraftType type = craft.getType();
-        if (craft.getCruising() && !(craft instanceof SinkingCraft)) {
+        if (craft.getCruising() && !(craft instanceof SinkingCraft) && craft instanceof BaseCraft baseCraft) {
             int armingDistance = type.getIntProperty(TTEAdditionsCraftTypeProperties.EXPLOSION_ARMING_DISTANCE);
             if (type.getFloatProperty(CraftType.COLLISION_EXPLOSION) > 0F && armingDistance > 0) {
                 Location spawnPoint = craft.getDataTag(TTEAdditionsCraftDataTags.CRAFT_SPAWNPOINT);
@@ -40,13 +40,25 @@ public class CraftTranslateListener implements Listener {
                     distanceReached = spawnPoint.distanceSquared(centerOfCraft) > armingDistance;
                 }
 
-                if (distanceReached && craft instanceof BaseCraft baseCraft) {
-                    try {
-                        final long explosionTime = craft.getOrigPilotTime() + type.getIntProperty(CraftType.EXPLOSION_ARMING_TIME) + 1000;
-                        ORIG_PILOT_TIME_FIELD.setLong(baseCraft, explosionTime);
-                    } catch(Exception ex) {
-                        // Ignore
+                final long now = System.currentTimeMillis();
+
+                boolean reachedByArmingTime = now - craft.getOrigPilotTime() > craft.getType().getIntProperty(CraftType.EXPLOSION_ARMING_TIME);
+
+                if (reachedByArmingTime == distanceReached) {
+                    return;
+                }
+
+                try {
+                    final long explosionTime = craft.getOrigPilotTime() + type.getIntProperty(CraftType.EXPLOSION_ARMING_TIME) + 1;
+                    final long timeDelta = explosionTime - now;
+                    if (distanceReached) {
+                        ORIG_PILOT_TIME_FIELD.setLong(baseCraft, baseCraft.getOrigPilotTime() - timeDelta - 1000);
+                    } else {
+                        // Move pilot time into the future
+                        ORIG_PILOT_TIME_FIELD.setLong(baseCraft, baseCraft.getOrigPilotTime() + timeDelta + 1000);
                     }
+                } catch(Exception ex) {
+                    // Ignore
                 }
             }
         }
