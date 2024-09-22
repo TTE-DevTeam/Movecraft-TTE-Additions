@@ -1,15 +1,18 @@
 package de.dertoaster.movecrafttteadditions.sign;
 
+import de.dertoaster.movecrafttteadditions.craft.SubcraftMoveCraft;
 import net.countercraft.movecraft.Movecraft;
 import net.countercraft.movecraft.MovecraftLocation;
-import net.countercraft.movecraft.craft.*;
+import net.countercraft.movecraft.craft.Craft;
+import net.countercraft.movecraft.craft.CraftManager;
+import net.countercraft.movecraft.craft.SubCraft;
+import net.countercraft.movecraft.craft.SubCraftImpl;
 import net.countercraft.movecraft.craft.type.CraftType;
 import net.countercraft.movecraft.events.CraftPilotEvent;
 import net.countercraft.movecraft.localisation.I18nSupport;
 import net.countercraft.movecraft.processing.functions.Result;
 import net.countercraft.movecraft.sign.AbstractSubcraftSign;
 import net.countercraft.movecraft.sign.SignListener;
-import net.countercraft.movecraft.util.MathUtils;
 import net.countercraft.movecraft.util.Pair;
 import net.countercraft.movecraft.util.hitboxes.HitBox;
 import net.kyori.adventure.text.Component;
@@ -104,7 +107,7 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
                 if (parents.size() > 1) {
                     return new Pair(Result.failWithMessage(I18nSupport.getInternationalisedString("Detection - Failed - Already commanding a craft")), (Object)null);
                 } else if (parents.size() < 1) {
-                    return new Pair(Result.succeed(), new SubcraftRotateCraft(type, w, p));
+                    return new Pair(Result.succeed(), new SubcraftMoveCraft(type, w, p));
                 } else {
                     Craft parent = (Craft)parents.iterator().next();
                     return new Pair(Result.succeed(), new SubCraftImpl(type, w, parent));
