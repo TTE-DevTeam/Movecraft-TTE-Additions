@@ -17,10 +17,15 @@ import static org.apache.commons.lang3.reflect.FieldUtils.getField;
 
 public class CraftTranslateListener implements Listener {
 
-    protected static final Field ORIG_PILOT_TIME_FIELD = getField(BaseCraft.class, "origPilotTime");
+    protected static Field ORIG_PILOT_TIME_FIELD;
 
     static {
-        ORIG_PILOT_TIME_FIELD.setAccessible(true);
+        try {
+            ORIG_PILOT_TIME_FIELD = BaseCraft.class.getDeclaredField("origPilotTime");
+            ORIG_PILOT_TIME_FIELD.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @EventHandler
