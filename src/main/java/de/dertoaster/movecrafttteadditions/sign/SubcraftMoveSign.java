@@ -50,12 +50,8 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
         return result;
     }
 
-    @Override
-    protected void runDetectTask(Action action, CraftType subcraftType, Craft craft, World world, Player player, MovecraftLocation startPoint) {
-        if (this.signWrapperCur == null) {
-            return;
-        }
-        final int MAX_MOVEMENT = subcraftType.getIntProperty(CraftType.MAX_STATIC_MOVE);
+    protected Vector getMovementVector(SignListener.SignWrapper wrapper, CraftType craftType) {
+        final int MAX_MOVEMENT = craftType.getIntProperty(CraftType.MAX_STATIC_MOVE);
 
         int offsetFrontBack = 0;
         int offsetVertical = 0;
@@ -97,6 +93,15 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
             }
         }
 
+        return movement;
+    }
+
+    @Override
+    protected void runDetectTask(Action action, CraftType subcraftType, Craft craft, World world, Player player, MovecraftLocation startPoint) {
+        if (this.signWrapperCur == null) {
+            return;
+        }
+        Vector movement = this.getMovementVector(this.signWrapperCur, subcraftType);
         if (action.isRightClick()) {
             movement.multiply(-1);
         }
@@ -150,6 +155,31 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
     }
 
     @Override
+    protected boolean isSignValid(Action clickType, SignListener.SignWrapper sign, Player player) {
+        if (super.isSignValid(clickType, sign, player)) {
+            CraftType craftType = this.getCraftType(sign);
+
+            final Vector movement = this.getMovementVector(sign, craftType);
+            if (clickType.isRightClick()) {
+                movement.multiply(-1);
+            }
+
+            if (!craftType.getBoolProperty(CraftType.ALLOW_HORIZONTAL_MOVEMENT) && (movement.getX() != 0 || movement.getZ() != 0)) {
+                player.sendMessage(I18nSupport.getInternationalisedString("Crafttype does not support horizontal movement!"));
+                return false;
+            }
+
+            if (!craftType.getBoolProperty(CraftType.ALLOW_VERTICAL_MOVEMENT) && (movement.getY() != 0)) {
+                player.sendMessage(I18nSupport.getInternationalisedString("Crafttype does not support vertical movement!"));
+                return false;
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     protected Component getDefaultTextFor(int line) {
         switch (line) {
             case 2: return DEFAULT_LINE_3;
@@ -164,9 +194,26 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
         if (!player.hasPermission("movecraft." + craftTypeStr + ".move")) {
             player.sendMessage(I18nSupport.getInternationalisedString("Insufficient Permissions"));
             return false;
+        } else if (!craftType.getBoolProperty(CraftType.CAN_STATIC_MOVE)) {
+            player.sendMessage(I18nSupport.getInternationalisedString("Specified craft type can not static move!"));
+            return false;
         } else {
-            return craftType.getBoolProperty(CraftType.CAN_STATIC_MOVE);
+            final Vector movement = this.getMovementVector(signWrapper, craftType);
+            if (action.isRightClick()) {
+                movement.multiply(-1);
+            }
+
+            if (!craftType.getBoolProperty(CraftType.ALLOW_HORIZONTAL_MOVEMENT) && (movement.getX() != 0 || movement.getZ() != 0)) {
+                player.sendMessage(I18nSupport.getInternationalisedString("Crafttype does not support horizontal movement!"));
+                return false;
+            }
+
+            if (!craftType.getBoolProperty(CraftType.ALLOW_VERTICAL_MOVEMENT) && (movement.getY() != 0)) {
+                player.sendMessage(I18nSupport.getInternationalisedString("Crafttype does not support vertical movement!"));
+                return false;
+            }
         }
+        return true;
     }
 
     @Override
