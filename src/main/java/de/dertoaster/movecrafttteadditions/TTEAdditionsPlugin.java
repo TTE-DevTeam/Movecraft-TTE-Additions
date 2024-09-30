@@ -2,6 +2,7 @@ package de.dertoaster.movecrafttteadditions;
 
 import de.dertoaster.movecrafttteadditions.init.TTEAdditionsCraftDataTags;
 import de.dertoaster.movecrafttteadditions.init.TTEAdditionsCraftTypeProperties;
+import de.dertoaster.movecrafttteadditions.listener.CraftDetectListener;
 import de.dertoaster.movecrafttteadditions.listener.CraftPilotListener;
 import de.dertoaster.movecrafttteadditions.listener.CraftTranslateListener;
 import de.dertoaster.movecrafttteadditions.sign.ReverseCruiseSign;
@@ -24,14 +25,19 @@ public final class TTEAdditionsPlugin extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
 
-        TTEAdditionsCraftTypeProperties.register();
         TTEAdditionsCraftDataTags.register();
 
         Bukkit.getServer().getPluginManager().registerEvents(new CraftPilotListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new CraftTranslateListener(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new CraftDetectListener(), this);
 
         MovecraftSignRegistry.INSTANCE.register("Subcraft Move", new SubcraftMoveSign(CraftManager.getInstance()::getCraftTypeFromString, TTEAdditionsPlugin::getInstance), true, "SC Move");
         MovecraftSignRegistry.INSTANCE.register("Reverse:", new ReverseCruiseSign("Reverse:"));
+    }
+
+    @Override
+    public void onLoad() {
+        TTEAdditionsCraftTypeProperties.register();
     }
 
     @Override
