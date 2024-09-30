@@ -57,7 +57,7 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
         int offsetVertical = 0;
         int offsetLeftRight = 0;
 
-        String shiftData = this.signWrapperCur.getRaw(2);
+        String shiftData = wrapper.getRaw(2);
         if (!shiftData.isBlank()) {
             String[] strArr = shiftData.split(",");
             if (strArr.length == 3) {
@@ -73,7 +73,7 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
             }
         }
 
-        final Vector signDirection = this.signWrapperCur.facing().getDirection().normalize();
+        final Vector signDirection = wrapper.facing().getDirection().normalize();
         Vector movement = signDirection.clone();
         if (offsetLeftRight != 0 || offsetFrontBack != 0 || offsetVertical != 0) {
             // Limit the values
