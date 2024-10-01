@@ -21,6 +21,6 @@ public class ReverseCruiseSign extends CruiseSign {
     protected void setCraftCruising(Player player, CruiseDirection direction, Craft craft) {
         super.setCraftCruising(player, direction, craft);
         // TODO: Add speed multiplier for crafts
-        craft.setCruiseCooldownMultiplier(1.5D);
+        craft.setCruiseCooldownMultiplier(2D);
     }
 }
