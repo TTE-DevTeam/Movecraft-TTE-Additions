@@ -6,6 +6,7 @@ import de.dertoaster.movecrafttteadditions.listener.CraftDetectListener;
 import de.dertoaster.movecrafttteadditions.listener.CraftPilotListener;
 import de.dertoaster.movecrafttteadditions.listener.CraftTranslateListener;
 import de.dertoaster.movecrafttteadditions.sign.ReverseCruiseSign;
+import de.dertoaster.movecrafttteadditions.sign.SpeedSignModified;
 import de.dertoaster.movecrafttteadditions.sign.SubcraftMoveSign;
 import net.countercraft.movecraft.craft.CraftManager;
 import net.countercraft.movecraft.listener.CraftTypeListener;
@@ -29,10 +30,12 @@ public final class TTEAdditionsPlugin extends JavaPlugin {
 
         Bukkit.getServer().getPluginManager().registerEvents(new CraftPilotListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new CraftTranslateListener(), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new CraftDetectListener(), this);
+        // Disabled until fixed
+        //Bukkit.getServer().getPluginManager().registerEvents(new CraftDetectListener(), this);
 
         MovecraftSignRegistry.INSTANCE.register("Subcraft Move", new SubcraftMoveSign(CraftManager.getInstance()::getCraftTypeFromString, TTEAdditionsPlugin::getInstance), true, "SC Move");
         MovecraftSignRegistry.INSTANCE.register("Reverse:", new ReverseCruiseSign("Reverse:"));
+        MovecraftSignRegistry.INSTANCE.register("Speed:", new SpeedSignModified(), true);
     }
 
     @Override
