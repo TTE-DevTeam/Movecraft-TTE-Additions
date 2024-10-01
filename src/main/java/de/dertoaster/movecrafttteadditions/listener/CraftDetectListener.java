@@ -5,9 +5,11 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.countercraft.movecraft.CruiseDirection;
+import net.countercraft.movecraft.Movecraft;
 import net.countercraft.movecraft.MovecraftLocation;
 import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.craft.CraftManager;
+import net.countercraft.movecraft.craft.SubCraft;
 import net.countercraft.movecraft.craft.SubCraftImpl;
 import net.countercraft.movecraft.craft.type.CraftType;
 import net.countercraft.movecraft.events.CraftDetectEvent;
@@ -15,6 +17,8 @@ import net.countercraft.movecraft.events.CraftReleaseEvent;
 import net.countercraft.movecraft.processing.functions.Result;
 import net.countercraft.movecraft.sign.*;
 import net.countercraft.movecraft.util.Pair;
+import net.countercraft.movecraft.util.hitboxes.HitBox;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -23,11 +27,10 @@ import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static de.dertoaster.movecrafttteadditions.init.TTEAdditionsCraftTypeProperties.CRUISE_SIGNS_MUST_ALIGN;
@@ -39,6 +42,10 @@ public class CraftDetectListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onCraftDetect(final CraftDetectEvent event) {
+
+        if (event.getCraft() instanceof SubCraft) {
+            return;
+        }
 
         if (STARTING_LOCATIONS_IN_USE.contains(event.getStartLocation())) {
             return;
@@ -76,12 +83,12 @@ public class CraftDetectListener implements Listener {
             SignListener.SignWrapper[] wrappers = SignListener.INSTANCE.getSignWrappers(sign, true);
             List<SignListener.SignWrapper> wrappersForMapping = new ArrayList<>();
             for (SignListener.SignWrapper wrapper : wrappers) {
-                AbstractMovecraftSign signHandler = MovecraftSignRegistry.INSTANCE.getCraftSign(wrapper.line(0));
+                AbstractMovecraftSign signHandler = MovecraftSignRegistry.INSTANCE.get(wrapper.line(0));
                 if (signHandler instanceof CruiseSign cruiseSign) {
                     signMap.computeIfAbsent(cruiseSign.getClass(), c -> new ObjectArraySet<>()).add(wrapper);
                     wrappersForMapping.add(wrapper);
                 } else if (signHandler instanceof CraftPilotSign pilotSign) {
-                    if (pilotSign.getCraftType() != null) {
+                    if (pilotSign.getCraftType() != null && !pilotSign.getCraftType().getBoolProperty(CraftType.CRUISE_ON_PILOT)) {
                         pilotSignLocations.add(mLoc);
                         pilotSigns.computeIfAbsent(pilotSign.getCraftType(), t -> new ArrayList<>()).add(mLoc);
                     }
@@ -106,11 +113,11 @@ public class CraftDetectListener implements Listener {
                                 if (parents.size() > 1)
                                     return new Pair<>(Result.fail(), null);
 
-                                return new Pair<>(Result.succeed(), new SubCraftImpl(type, w, craft));
+                                return new Pair<>(Result.succeed(), new SubCraftImpl(typeTmpTmp, w, craft));
                             },
                             craft.getWorld(),
                             null,
-                            craft.getAudience(),
+                            Audience.empty(),
                             (Craft subcraft) -> () -> removeSignsAndReAddToParent(subcraft, craft, removalFunction, wrapperRetrievalFunction)
                     );
                 }
@@ -150,15 +157,20 @@ public class CraftDetectListener implements Listener {
             List<SignListener.SignWrapper> signsToProcess = wrapperRetrievalFunction.apply(mLoc);
             if (signsToProcess != null && !signsToProcess.isEmpty()) {
                 signsToProcess.forEach((wrapper) -> {
-                    AbstractMovecraftSign signHandler = MovecraftSignRegistry.INSTANCE.getCraftSign(wrapper.line(0));
+                    AbstractCraftSign signHandler = MovecraftSignRegistry.INSTANCE.getCraftSign(wrapper.line(0));
                     if (signHandler instanceof CruiseSign cruiseSign) {
                         removalFunction.accept(cruiseSign.getClass(), wrapper);
                     }
                 });
             }
         }
-        // Patch hitbox back together
-        parent.setHitBox(parent.getHitBox().union(subcraft.getHitBox()));
+        (new BukkitRunnable() {
+            public void run() {
+                // Patch hitbox back together
+                parent.setHitBox(parent.getHitBox().union(subcraft.getHitBox()));
+                CraftManager.getInstance().release(subcraft, net.countercraft.movecraft.events.CraftReleaseEvent.Reason.SUB_CRAFT, true);
+            }
+        }).runTaskLater(Movecraft.getInstance(), 3L);
     }
 
 }
