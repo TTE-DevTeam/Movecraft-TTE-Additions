@@ -76,6 +76,7 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
         final Vector signDirection = wrapper.facing().getDirection().normalize();
         Vector movement = signDirection.clone();
         if (offsetLeftRight != 0 || offsetFrontBack != 0 || offsetVertical != 0) {
+            movement = new Vector(0,0,0);
             // Limit the values
             offsetFrontBack = Math.clamp(offsetFrontBack, -MAX_MOVEMENT, MAX_MOVEMENT);
             offsetVertical = Math.clamp(offsetVertical, -MAX_MOVEMENT, MAX_MOVEMENT);
@@ -84,11 +85,11 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
             movement.setY(movement.getBlockY() + offsetVertical);
 
             if (offsetFrontBack != 0) {
-                Vector shiftFrontBack = signDirection.clone().normalize().multiply(offsetFrontBack);
+                Vector shiftFrontBack = signDirection.clone().multiply(offsetFrontBack);
                 movement.add(shiftFrontBack);
             }
             if (offsetLeftRight != 0) {
-                Vector shiftLeftRight = signDirection.clone().normalize().rotateAroundY(Math.PI / 2).multiply(offsetLeftRight);
+                Vector shiftLeftRight = signDirection.clone().rotateAroundY(Math.PI / 2).multiply(offsetLeftRight);
                 movement.add(shiftLeftRight);
             }
         }
