@@ -9,6 +9,7 @@ import net.countercraft.movecraft.craft.SubCraft;
 import net.countercraft.movecraft.craft.SubCraftImpl;
 import net.countercraft.movecraft.craft.type.CraftType;
 import net.countercraft.movecraft.events.CraftPilotEvent;
+import net.countercraft.movecraft.listener.InteractListener;
 import net.countercraft.movecraft.localisation.I18nSupport;
 import net.countercraft.movecraft.processing.functions.Result;
 import net.countercraft.movecraft.sign.AbstractSubcraftSign;
@@ -25,6 +26,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -126,10 +128,9 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
                         HitBox newHitbox = parent.getHitBox().difference(subcraft.getHitBox());
                         parent.setHitBox(newHitbox);
                     }
-
+                    subcraft.translate(world, finalMovement.getBlockX(), finalMovement.getBlockY(), finalMovement.getBlockZ());
                     (new BukkitRunnable() {
                         public void run() {
-                            subcraft.translate(world, finalMovement.getBlockX(), finalMovement.getBlockY(), finalMovement.getBlockZ());
                             if (subcraft instanceof SubCraft) {
                                 Craft parent = ((SubCraft)subcraft).getParent();
                                 HitBox newHitbox = parent.getHitBox().union(subcraft.getHitBox());
@@ -211,6 +212,30 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
 
             if (!craftType.getBoolProperty(CraftType.ALLOW_VERTICAL_MOVEMENT) && (movement.getY() != 0)) {
                 player.sendMessage(I18nSupport.getInternationalisedString("Crafttype does not support vertical movement!"));
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    protected boolean canPlayerUseSignOn(Player player, @Nullable Craft craft) {
+        if (!super.canPlayerUseSignOn(player, craft)) {
+            return false;
+        }
+        int tickCooldown = (Integer)craft.getType().getPerWorldProperty(CraftType.PER_WORLD_TICK_COOLDOWN, craft.getWorld());
+        final CraftType craftType = craft.getType();
+        if (craftType.getBoolProperty(CraftType.GEAR_SHIFTS_AFFECT_DIRECT_MOVEMENT) && craftType.getBoolProperty(CraftType.GEAR_SHIFTS_AFFECT_TICK_COOLDOWN)) {
+            tickCooldown *= craft.getCurrentGear();
+        }
+        Long lastTime = Math.min(InteractListener.INTERACTION_TIME_MAP.get(craft.getUUID()), InteractListener.PLAYER_INTERACTION_TIME_MAP.get(player.getUniqueId()));
+        if (lastTime != null) {
+            long ticksElapsed = (System.currentTimeMillis() - lastTime) / 50L;
+            if (craft.getType().getBoolProperty(CraftType.HALF_SPEED_UNDERWATER) && craft.getHitBox().getMinY() < craft.getWorld().getSeaLevel()) {
+                ticksElapsed /= 2L;
+            }
+
+            if (ticksElapsed < (long)tickCooldown) {
                 return false;
             }
         }
