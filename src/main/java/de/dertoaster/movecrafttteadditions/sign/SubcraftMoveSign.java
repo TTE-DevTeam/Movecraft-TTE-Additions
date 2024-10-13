@@ -128,6 +128,9 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
                         HitBox newHitbox = parent.getHitBox().difference(subcraft.getHitBox());
                         parent.setHitBox(newHitbox);
                     }
+
+                    // TODO: Validate if this would move out of the parentcraft
+
                     subcraft.translate(world, finalMovement.getBlockX(), finalMovement.getBlockY(), finalMovement.getBlockZ());
                     (new BukkitRunnable() {
                         public void run() {
@@ -228,17 +231,32 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
         if (craftType.getBoolProperty(CraftType.GEAR_SHIFTS_AFFECT_DIRECT_MOVEMENT) && craftType.getBoolProperty(CraftType.GEAR_SHIFTS_AFFECT_TICK_COOLDOWN)) {
             tickCooldown *= craft.getCurrentGear();
         }
-        Long lastTime = Math.min(InteractListener.INTERACTION_TIME_MAP.get(craft.getUUID()), InteractListener.PLAYER_INTERACTION_TIME_MAP.get(player.getUniqueId()));
-        if (lastTime != null) {
-            long ticksElapsed = (System.currentTimeMillis() - lastTime) / 50L;
-            if (craft.getType().getBoolProperty(CraftType.HALF_SPEED_UNDERWATER) && craft.getHitBox().getMinY() < craft.getWorld().getSeaLevel()) {
-                ticksElapsed /= 2L;
+        //Long lastTime = Math.min(InteractListener.INTERACTION_TIME_MAP.get(craft.getUUID()), InteractListener.PLAYER_INTERACTION_TIME_MAP.get(player.getUniqueId()));
+        Long lastTimePlayer = InteractListener.PLAYER_INTERACTION_TIME_MAP.get(player.getUniqueId());
+        Long lastTimeCraft = InteractListener.INTERACTION_TIME_MAP.get(craft.getUUID());
+        if (lastTimePlayer != null || lastTimeCraft != null) {
+            Long lastTime = null;
+            if (lastTimePlayer == null) {
+                lastTime = lastTimeCraft;
             }
+            else if (lastTimeCraft == null) {
+                lastTime = lastTimePlayer;
+            }
+            else {
+                lastTime = Math.min(lastTimeCraft, lastTimePlayer);
+            }
+            if (lastTime != null) {
+                long ticksElapsed = (System.currentTimeMillis() - lastTime) / 50L;
+                if (craft.getType().getBoolProperty(CraftType.HALF_SPEED_UNDERWATER) && craft.getHitBox().getMinY() < craft.getWorld().getSeaLevel()) {
+                    ticksElapsed /= 2L;
+                }
 
-            if (ticksElapsed < (long)tickCooldown) {
-                return false;
+                if (ticksElapsed < (long)tickCooldown) {
+                    return false;
+                }
             }
         }
+
         return true;
     }
 
