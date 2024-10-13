@@ -123,15 +123,33 @@ public class SubcraftMoveSign extends AbstractSubcraftSign {
             }, world, player, player, (subcraft) -> {
                 return () -> {
                     Bukkit.getServer().getPluginManager().callEvent(new CraftPilotEvent(subcraft, CraftPilotEvent.Reason.SUB_CRAFT));
-                    if (subcraft instanceof SubCraft) {
+                    boolean movementAllowed = true;
+                    if (subcraft instanceof SubCraft && ((SubCraft) subcraft).getParent() != null) {
                         Craft parent = ((SubCraft)subcraft).getParent();
                         HitBox newHitbox = parent.getHitBox().difference(subcraft.getHitBox());
                         parent.setHitBox(newHitbox);
+
+                        // Validate if this would move out of the parentcraft
+                        HitBox subcraftHitbox = subcraft.getHitBox();
+                        final int minX = subcraftHitbox.getMinX() + finalMovement.getBlockX();
+                        final int minY = subcraftHitbox.getMinY() + finalMovement.getBlockY();
+                        final int minZ = subcraftHitbox.getMinZ() + finalMovement.getBlockZ();
+
+                        final int maxX = subcraftHitbox.getMaxX() + finalMovement.getBlockX();
+                        final int maxY = subcraftHitbox.getMaxY() + finalMovement.getBlockY();
+                        final int maxZ = subcraftHitbox.getMaxZ() + finalMovement.getBlockZ();
+
+                        if (!(parent.getHitBox().inBounds(minX, minY, minZ) && parent.getHitBox().inBounds(maxX, maxY, maxZ))) {
+                            movementAllowed = false;
+                        }
                     }
 
-                    // TODO: Validate if this would move out of the parentcraft
+                    if (movementAllowed) {
+                        subcraft.translate(world, finalMovement.getBlockX(), finalMovement.getBlockY(), finalMovement.getBlockZ());
+                    } else {
+                        player.sendMessage(I18nSupport.getInternationalisedComponent("Subcraft Move - can't move out of the parentcraft!"));
+                    }
 
-                    subcraft.translate(world, finalMovement.getBlockX(), finalMovement.getBlockY(), finalMovement.getBlockZ());
                     (new BukkitRunnable() {
                         public void run() {
                             if (subcraft instanceof SubCraft) {
