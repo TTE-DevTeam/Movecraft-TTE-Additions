@@ -8,6 +8,8 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
 public class MathUtil extends MathUtils {
 
     static final Vector AXIS_X = new Vector(1,0,0);
@@ -61,6 +63,22 @@ public class MathUtil extends MathUtils {
         double angle = r == MovecraftRotation.CLOCKWISE ? Math.PI / 2 : -Math.PI / 2;
         vector = vector.rotateAroundAxis(axisToVector(axis), angle);
         return new double[]{vector.getX(), vector.getY(), vector.getZ()};
+    }
+
+    public static final Random RNGESUS = new Random();
+
+    public static float randomBetween(final float a, final float b) {
+        return randomBetween(RNGESUS, a, b);
+    }
+
+    public static float randomBetween(final Random random, final float a, final float b) {
+        if (a == b) {
+            return a;
+        }
+        float aReal = Math.min(Math.abs(a), Math.abs(b));
+        float bReal = Math.max(Math.abs(a), Math.abs(b));
+        float result = random.nextFloat(bReal - aReal) + aReal;
+        return result;
     }
 
 }
