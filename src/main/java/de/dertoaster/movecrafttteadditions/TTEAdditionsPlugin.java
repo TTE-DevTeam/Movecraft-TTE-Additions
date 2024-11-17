@@ -6,10 +6,7 @@ import de.dertoaster.movecrafttteadditions.listener.CraftDetectListener;
 import de.dertoaster.movecrafttteadditions.listener.CraftPilotListener;
 import de.dertoaster.movecrafttteadditions.listener.CraftRotateListener;
 import de.dertoaster.movecrafttteadditions.listener.CraftTranslateListener;
-import de.dertoaster.movecrafttteadditions.sign.HonkSign;
-import de.dertoaster.movecrafttteadditions.sign.ReverseCruiseSign;
-import de.dertoaster.movecrafttteadditions.sign.SpeedSignModified;
-import de.dertoaster.movecrafttteadditions.sign.SubcraftMoveSign;
+import de.dertoaster.movecrafttteadditions.sign.*;
 import net.countercraft.movecraft.craft.CraftManager;
 import net.countercraft.movecraft.listener.CraftTypeListener;
 import net.countercraft.movecraft.sign.MovecraftSignRegistry;
@@ -40,6 +37,7 @@ public final class TTEAdditionsPlugin extends JavaPlugin {
         MovecraftSignRegistry.INSTANCE.register("Reverse:", new ReverseCruiseSign("Reverse:"));
         MovecraftSignRegistry.INSTANCE.register("Speed:", new SpeedSignModified(), true);
         MovecraftSignRegistry.INSTANCE.register("Horn", new HonkSign());
+        MovecraftSignRegistry.INSTANCE.register("Integrity:", new IntegritySign());
     }
 
     @Override
