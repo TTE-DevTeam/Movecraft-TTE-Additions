@@ -53,6 +53,9 @@ public class IntegritySign extends AbstractInformationSign {
     static final double ONE_THIRD = 1/3;
 
     protected void calcDisplayComponents(Craft craft) {
+        if (craft == null) {
+            return;
+        }
         this.displayComponents.clear();
 
         Counter<Material> materials = craft.getDataTag(Craft.MATERIALS);
@@ -66,16 +69,18 @@ public class IntegritySign extends AbstractInformationSign {
         final double blockDifference = originalBlockCount - currentBlockCount;
 
         double percentOfOriginalSize = currentBlockCount / originalBlockCount;
+        final double percentOfOriginalSizeReal = percentOfOriginalSize;
         percentOfOriginalSize *= 100.0;
 
         double percentOfMaxLoss = 1.0 - (blockDifference / maxBlockLoss);
+        final double percentOfMaxLossReal = percentOfMaxLoss;
         percentOfMaxLoss *= 100.0;
 
-        Style percentageStyle = calcStyle(percentOfOriginalSize, 80, 50);
+        Style percentageStyle = calcStyle(percentOfOriginalSizeReal, 80, 50);
         // PERCENTAGE
         displayComponents.add(Component.text("Size: " + formatPercent(percentOfOriginalSize) + "%").style(percentageStyle));
         // LOSS PERCENTAGE
-        displayComponents.add(Component.text("Integrity: " + formatPercent(percentOfMaxLoss) + "%").style(calcStyle(percentOfMaxLoss, TWO_THIRDS, ONE_THIRD)));
+        displayComponents.add(Component.text("Integrity: " + formatPercent(percentOfMaxLoss) + "%").style(calcStyle(percentOfMaxLossReal, TWO_THIRDS, ONE_THIRD)));
         // ORIGINAL SIZE
         displayComponents.add(Component.text("S: " + formatNumber(currentBlockCount) + "/" + formatNumber(originalBlockCount)).style(percentageStyle));
     }
