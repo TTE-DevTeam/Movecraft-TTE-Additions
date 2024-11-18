@@ -58,7 +58,6 @@ public class IntegritySign extends AbstractInformationSign {
         }
         this.displayComponents.clear();
 
-        Counter<Material> materials = craft.getDataTag(Craft.MATERIALS);
         int nonNegligibleBlocks = craft.getDataTag(Craft.NON_NEGLIGIBLE_BLOCKS);
         int nonNegligibleSolidBlocks = craft.getDataTag(Craft.NON_NEGLIGIBLE_SOLID_BLOCKS);
 
@@ -69,7 +68,7 @@ public class IntegritySign extends AbstractInformationSign {
         final int currentBlockCount = (craft.getType().getBoolProperty(CraftType.BLOCKED_BY_WATER) ? nonNegligibleBlocks : nonNegligibleSolidBlocks);
         final double blockDifference = originalBlockCount - currentBlockCount;
 
-        double percentOfOriginalSize = currentBlockCount / originalBlockCount;
+        double percentOfOriginalSize = (double)currentBlockCount / (double)originalBlockCount;
         final double percentOfOriginalSizeReal = percentOfOriginalSize;
         percentOfOriginalSize *= 100.0;
 
@@ -79,6 +78,7 @@ public class IntegritySign extends AbstractInformationSign {
 
         Style percentageStyle = calcStyle(percentOfOriginalSizeReal, 0.8, 0.5);
         // PERCENTAGE
+        // TODO: FOr whatever reason this displays 0%...
         displayComponents.add(Component.text("Size: " + formatPercent(percentOfOriginalSize) + "%").style(percentageStyle));
         // LOSS PERCENTAGE
         displayComponents.add(Component.text("Integrity: " + formatPercent(percentOfMaxLoss) + "%").style(calcStyle(percentOfMaxLossReal, TWO_THIRDS, ONE_THIRD)));
