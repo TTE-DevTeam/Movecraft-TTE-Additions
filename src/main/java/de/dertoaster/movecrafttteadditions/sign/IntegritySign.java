@@ -62,8 +62,9 @@ public class IntegritySign extends AbstractInformationSign {
         int nonNegligibleBlocks = craft.getDataTag(Craft.NON_NEGLIGIBLE_BLOCKS);
         int nonNegligibleSolidBlocks = craft.getDataTag(Craft.NON_NEGLIGIBLE_SOLID_BLOCKS);
 
-        final double originalBlockCount = craft.getOrigBlockCount();
-        final double criticalBlockCount = originalBlockCount * (craft.getType().getDoubleProperty(CraftType.OVERALL_SINK_PERCENT) / 100);
+        final int originalBlockCount = craft.getOrigBlockCount();
+        // TODO: Round
+        final int criticalBlockCount = (int)((double)originalBlockCount * (craft.getType().getDoubleProperty(CraftType.OVERALL_SINK_PERCENT) / 100));
         final double maxBlockLoss = originalBlockCount - criticalBlockCount;
         final double currentBlockCount = (craft.getType().getBoolProperty(CraftType.BLOCKED_BY_WATER) ? nonNegligibleBlocks : nonNegligibleSolidBlocks);
         final double blockDifference = originalBlockCount - currentBlockCount;
@@ -99,7 +100,7 @@ public class IntegritySign extends AbstractInformationSign {
         return String.format("%.2f", number);
     }
 
-    protected static String formatNumber(double number) {
+    protected static String formatNumber(int number) {
         String result = "" + number;
         if (number < 100000) {
             return result;
