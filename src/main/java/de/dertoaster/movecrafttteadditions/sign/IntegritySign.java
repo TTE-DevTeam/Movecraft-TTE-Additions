@@ -77,7 +77,7 @@ public class IntegritySign extends AbstractInformationSign {
         final double percentOfMaxLossReal = percentOfMaxLoss;
         percentOfMaxLoss *= 100.0;
 
-        Style percentageStyle = calcStyle(percentOfOriginalSizeReal, 80, 50);
+        Style percentageStyle = calcStyle(percentOfOriginalSizeReal, 0.8, 0.5);
         // PERCENTAGE
         displayComponents.add(Component.text("Size: " + formatPercent(percentOfOriginalSize) + "%").style(percentageStyle));
         // LOSS PERCENTAGE
