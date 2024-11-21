@@ -68,7 +68,7 @@ public class IntegritySign extends AbstractInformationSign {
         final int currentBlockCount = (craft.getType().getBoolProperty(CraftType.BLOCKED_BY_WATER) ? nonNegligibleBlocks : nonNegligibleSolidBlocks);
         final double blockDifference = originalBlockCount - currentBlockCount;
 
-        double percentOfOriginalSize = (double)currentBlockCount / (double)originalBlockCount;
+        double percentOfOriginalSize = ((double)currentBlockCount) / ((double)originalBlockCount);
         final double percentOfOriginalSizeReal = percentOfOriginalSize;
         percentOfOriginalSize *= 100.0;
 
