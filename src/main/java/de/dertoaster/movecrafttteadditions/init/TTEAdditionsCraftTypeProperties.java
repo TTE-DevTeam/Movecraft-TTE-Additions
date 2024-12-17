@@ -7,6 +7,8 @@ import net.countercraft.movecraft.craft.type.property.IntegerProperty;
 import net.countercraft.movecraft.craft.type.property.StringProperty;
 import org.bukkit.NamespacedKey;
 
+import javax.naming.Name;
+
 public class TTEAdditionsCraftTypeProperties {
 
     public static final NamespacedKey EXPLOSION_ARMING_DISTANCE = new NamespacedKey("movecraft-tte-additions", "explosion_arming_distance");
@@ -20,6 +22,7 @@ public class TTEAdditionsCraftTypeProperties {
     public static NamespacedKey SOUND_ON_PILOT_PITCH_MIN = new NamespacedKey("movecraft-tte-additions", "pilot_sound_pitch_min");
     public static NamespacedKey SOUND_ON_PILOT_PITCH_MAX = new NamespacedKey("movecraft-tte-additions", "pilot_sound_pitch_max");
 
+    public static NamespacedKey SOUND_ON_SINK = new NamespacedKey("movecraft-tte-additions", "sink_sound");
 
     public static NamespacedKey CAN_HONK = new NamespacedKey("movecraft-tte-additions", "can_honk");
     public static NamespacedKey HONK_SOUND = new NamespacedKey("movecraft-tte-additions", "honk_sound");
@@ -41,6 +44,7 @@ public class TTEAdditionsCraftTypeProperties {
         CraftType.registerProperty(new BooleanProperty("canHonk", CAN_HONK, type -> false));
 
         CraftType.registerProperty(new StringProperty("rotationSound", SOUND_ON_ROTATION, type -> null));
+        CraftType.registerProperty(new StringProperty("sinkSound", SOUND_ON_SINK, type -> null));
         CraftType.registerProperty(new StringProperty("pilotSound", SOUND_ON_PILOT, type -> null));
         CraftType.registerProperty(new StringProperty("honkSound", HONK_SOUND, type -> null));
 
