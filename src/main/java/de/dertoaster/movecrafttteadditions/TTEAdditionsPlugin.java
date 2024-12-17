@@ -2,10 +2,7 @@ package de.dertoaster.movecrafttteadditions;
 
 import de.dertoaster.movecrafttteadditions.init.TTEAdditionsCraftDataTags;
 import de.dertoaster.movecrafttteadditions.init.TTEAdditionsCraftTypeProperties;
-import de.dertoaster.movecrafttteadditions.listener.CraftDetectListener;
-import de.dertoaster.movecrafttteadditions.listener.CraftPilotListener;
-import de.dertoaster.movecrafttteadditions.listener.CraftRotateListener;
-import de.dertoaster.movecrafttteadditions.listener.CraftTranslateListener;
+import de.dertoaster.movecrafttteadditions.listener.*;
 import de.dertoaster.movecrafttteadditions.sign.*;
 import net.countercraft.movecraft.craft.CraftManager;
 import net.countercraft.movecraft.listener.CraftTypeListener;
@@ -30,6 +27,7 @@ public final class TTEAdditionsPlugin extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new CraftPilotListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new CraftTranslateListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new CraftRotateListener(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new CraftSinkListener(), this);
         // Disabled until fixed
         //Bukkit.getServer().getPluginManager().registerEvents(new CraftDetectListener(), this);
 
