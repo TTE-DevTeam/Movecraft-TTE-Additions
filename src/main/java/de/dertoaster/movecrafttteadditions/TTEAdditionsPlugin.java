@@ -1,13 +1,19 @@
 package de.dertoaster.movecrafttteadditions;
 
+import de.dertoaster.movecrafttteadditions.commandrestrictor.CommandRestriction;
+import de.dertoaster.movecrafttteadditions.commandrestrictor.listener.CommandListener;
+import de.dertoaster.movecrafttteadditions.commandrestrictor.listener.CraftDetectOrUpdateListener;
 import de.dertoaster.movecrafttteadditions.init.TTEAdditionsCraftDataTags;
 import de.dertoaster.movecrafttteadditions.init.TTEAdditionsCraftTypeProperties;
-import de.dertoaster.movecrafttteadditions.listener.*;
+import de.dertoaster.movecrafttteadditions.listener.CraftPilotListener;
+import de.dertoaster.movecrafttteadditions.listener.CraftRotateListener;
+import de.dertoaster.movecrafttteadditions.listener.CraftSinkListener;
+import de.dertoaster.movecrafttteadditions.listener.CraftTranslateListener;
 import de.dertoaster.movecrafttteadditions.sign.*;
 import net.countercraft.movecraft.craft.CraftManager;
-import net.countercraft.movecraft.listener.CraftTypeListener;
 import net.countercraft.movecraft.sign.MovecraftSignRegistry;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TTEAdditionsPlugin extends JavaPlugin {
@@ -22,12 +28,21 @@ public final class TTEAdditionsPlugin extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
 
+        ConfigurationSerialization.registerClass(CommandRestriction.class, "CommandRestriction");
+
+        saveDefaultConfig();
+
+        // Call to init
+        getConfig();
+
         TTEAdditionsCraftDataTags.register();
 
         Bukkit.getServer().getPluginManager().registerEvents(new CraftPilotListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new CraftTranslateListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new CraftRotateListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new CraftSinkListener(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new CraftDetectOrUpdateListener(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new CommandListener(), this);
         // Disabled until fixed
         //Bukkit.getServer().getPluginManager().registerEvents(new CraftDetectListener(), this);
 

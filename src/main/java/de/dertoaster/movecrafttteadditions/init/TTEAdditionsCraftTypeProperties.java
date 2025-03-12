@@ -33,6 +33,8 @@ public class TTEAdditionsCraftTypeProperties {
     public static NamespacedKey HONK_MAX_DISTANCE = new NamespacedKey("movecraft-tte-additions", "honk_max_distance");
     public static NamespacedKey HONK_MIN_COOLDOWN = new NamespacedKey("movecraft-tte-additions", "honk_min_cooldown");
 
+    public static NamespacedKey COMMAND_RESTRICTIONS_ENABLED = new NamespacedKey("movecraft-tte-additions", "enforce_command_restrictions");
+
     public static void register() {
         CraftType.registerProperty(new IntegerProperty("explosionArmingDistance", EXPLOSION_ARMING_DISTANCE, type -> -1));
         CraftType.registerProperty(new IntegerProperty("honkSizeDivisor", HONK_SIZE_DIVISOR, type -> 5000));
@@ -54,7 +56,7 @@ public class TTEAdditionsCraftTypeProperties {
         CraftType.registerProperty(new FloatProperty("honkMaxVolume", HONK_MAX_VOLUME, type -> 10.0F));
         CraftType.registerProperty(new FloatProperty("honkSizeScaling", HONK_SIZE_SCALING, type -> 0.1F));
 
-
+        CraftType.registerProperty(new BooleanProperty("requireSignsForCommands", COMMAND_RESTRICTIONS_ENABLED, type -> true));
 
     }
 
