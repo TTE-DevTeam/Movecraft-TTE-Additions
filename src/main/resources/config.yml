@@ -1,0 +1,36 @@
+CommandRestrictions:
+  - ==: CommandRestriction
+    Command: "cruise"
+    ValidationRegEx: "cruise (NORTH)|(N)|(EAST)|(E)|(SOUTH)|(S)|(WEST)|(W)|(ON).*"
+    PossibleSigns:
+      - "net.countercraft.movecraft.sign.CruiseSign"
+  - ==: CommandRestriction
+    Command: "cruise"
+    ValidationRegEx: "cruise (UP)|(U).*"
+    PossibleSigns:
+      - "net.countercraft.movecraft.sign.AscendSign"
+  - ==: CommandRestriction
+    Command: "cruise"
+    ValidationRegEx: "cruise (DOWN)|(D).*"
+    PossibleSigns:
+      - "net.countercraft.movecraft.sign.DescendSign"
+  - ==: CommandRestriction
+    Command: "scuttle"
+    ValidationRegEx: "scuttle"
+    PossibleSigns:
+      - "net.countercraft.movecraft.sign.ScuttleSign"
+  - ==: CommandRestriction
+    Command: "rotate"
+    ValidationRegEx: "rotate (LEFT)|(RIGHT).*"
+    PossibleSigns:
+      - "net.countercraft.movecraft.sign.HelmSign"
+  - ==: CommandRestriction
+    Command: "contacts"
+    ValidationRegEx: "contacts.*"
+    PossibleSigns:
+      - "net.countercraft.movecraft.sign.ContactsSign"
+  - ==: CommandRestriction
+    Command: "craftinfo"
+    ValidationRegEx: "craftinfo"
+    PossibleSigns:
+      - "net.countercraft.movecraft.sign.AscendSign"
