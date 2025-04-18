@@ -11,7 +11,10 @@ import de.dertoaster.movecrafttteadditions.listener.CraftPilotListener;
 import de.dertoaster.movecrafttteadditions.listener.CraftRotateListener;
 import de.dertoaster.movecrafttteadditions.listener.CraftSinkListener;
 import de.dertoaster.movecrafttteadditions.listener.CraftTranslateListener;
-import de.dertoaster.movecrafttteadditions.sign.*;
+import de.dertoaster.movecrafttteadditions.sign.HonkSign;
+import de.dertoaster.movecrafttteadditions.sign.IntegritySign;
+import de.dertoaster.movecrafttteadditions.sign.ReverseCruiseSign;
+import de.dertoaster.movecrafttteadditions.sign.SubcraftMoveSign;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -61,7 +64,6 @@ public final class TTEAdditionsPlugin extends JavaPlugin {
 
         MovecraftSignRegistry.INSTANCE.register("Subcraft Move", new SubcraftMoveSign(CraftManager.getInstance()::getCraftTypeFromString, TTEAdditionsPlugin::getInstance), true, "SC Move");
         MovecraftSignRegistry.INSTANCE.register("Reverse:", new ReverseCruiseSign("Reverse:"));
-        MovecraftSignRegistry.INSTANCE.register("Speed:", new SpeedSignModified(), true);
         MovecraftSignRegistry.INSTANCE.register("Horn", new HonkSign());
         MovecraftSignRegistry.INSTANCE.register("Integrity:", new IntegritySign());
 

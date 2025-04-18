@@ -5,10 +5,8 @@ import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.craft.type.CraftType;
 import net.countercraft.movecraft.sign.AbstractInformationSign;
 import net.countercraft.movecraft.sign.SignListener;
-import net.countercraft.movecraft.util.Counter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 

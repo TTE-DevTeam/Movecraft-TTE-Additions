@@ -14,7 +14,7 @@ public class ReverseCruiseSign extends CruiseSign {
 
     @Override
     protected CruiseDirection getCruiseDirection(SignListener.SignWrapper sign) {
-        return super.getCruiseDirection(sign).getOpposite();
+        return super.getCruiseDirection(sign).getOpposite2D();
     }
 
     @Override
