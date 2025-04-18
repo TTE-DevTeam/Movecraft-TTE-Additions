@@ -3,6 +3,7 @@ package de.dertoaster.movecrafttteadditions;
 import de.dertoaster.movecrafttteadditions.commandrestrictor.CommandRestriction;
 import de.dertoaster.movecrafttteadditions.commandrestrictor.listener.CommandListener;
 import de.dertoaster.movecrafttteadditions.commandrestrictor.listener.CraftDetectOrUpdateListener;
+import de.dertoaster.movecrafttteadditions.gui.PlayerHeads;
 import de.dertoaster.movecrafttteadditions.init.TTEAdditionsCraftDataTags;
 import de.dertoaster.movecrafttteadditions.init.TTEAdditionsCraftTypeProperties;
 import de.dertoaster.movecrafttteadditions.listener.CraftPilotListener;
@@ -51,6 +52,8 @@ public final class TTEAdditionsPlugin extends JavaPlugin {
         MovecraftSignRegistry.INSTANCE.register("Speed:", new SpeedSignModified(), true);
         MovecraftSignRegistry.INSTANCE.register("Horn", new HonkSign());
         MovecraftSignRegistry.INSTANCE.register("Integrity:", new IntegritySign());
+
+        PlayerHeads.setup();
     }
 
     @Override
