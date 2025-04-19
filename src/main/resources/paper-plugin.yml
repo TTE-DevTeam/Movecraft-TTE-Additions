@@ -1,5 +1,5 @@
 name: Movecraft-TTE-Additions
-version: '1.3'
+version: '1.5'
 main: de.dertoaster.movecrafttteadditions.TTEAdditionsPlugin
 loader: de.dertoaster.movecrafttteadditions.TTEAdditionsClassLoader
 api-version: '1.21'
