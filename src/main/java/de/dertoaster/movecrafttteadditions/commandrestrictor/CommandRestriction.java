@@ -54,7 +54,7 @@ public record CommandRestriction(
     }
 
     public boolean restricts(final String commandString, final @NotNull Craft craft) {
-        Matcher matcher = this.shouldBLockRegEx().matcher(commandString);
+        Matcher matcher = this.shouldBLockRegEx().matcher(commandString.toUpperCase());
         if (!matcher.find()) {
             return false;
         }
