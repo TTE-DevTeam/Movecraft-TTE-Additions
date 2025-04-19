@@ -33,4 +33,6 @@ CommandRestrictions:
     Command: "/craftinfo"
     ValidationRegEx: "craftinfo"
     PossibleSigns:
-      - "net.countercraft.movecraft.sign.AscendSign"
+      - "net.countercraft.movecraft.features.status.StatusSign"
+      - "de.dertoaster.movecrafttteadditions.sign.IntegritySign"
+      - "net.countercraft.movecraft.sign.SpeedSign"
