@@ -118,7 +118,10 @@ public final class CraftTypeMergeInfoCommand {
 
     static void process(Player sender, Set<Material> materialSet, Component heading) {
         // Now, create the GUI!
-        List<Item> items = materialSet.stream().map(material -> new SimpleItem(new ItemBuilder(material))).collect(Collectors.toUnmodifiableList());
+        List<Item> items = materialSet.stream()
+                .filter(material -> material.isItem())
+                .map(material -> new SimpleItem(new ItemBuilder(material)))
+                .collect(Collectors.toUnmodifiableList());
 
         Gui gui = PagedGui.items()
                 .setStructure(Layouts.PAGED_WITH_TITLE_4_ROWS)
@@ -136,18 +139,4 @@ public final class CraftTypeMergeInfoCommand {
                 .open(sender);
     }
 
-    static List<String> getCraftTypesFor(final CommandSender sender) {
-        List<String> result = new ArrayList<>();
-        if (sender instanceof Player) {
-            CraftManager.getInstance().getCraftTypes().forEach(ct -> {
-                String name = ct.getStringProperty(CraftType.NAME);
-                if (sender.hasPermission("movecraft." + name + ".pilot")) {
-                    result.add(name);
-                }
-            });
-        } else {
-            CraftManager.getInstance().getCraftTypes().forEach(ct -> result.add(ct.getStringProperty(CraftType.NAME)));
-        }
-        return result;
-    }
 }
