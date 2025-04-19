@@ -5,6 +5,7 @@ import de.dertoaster.movecrafttteadditions.init.TTEAdditionsCraftTypeProperties;
 import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.craft.CraftManager;
 import net.countercraft.movecraft.util.MathUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,6 +47,7 @@ public class CommandListener implements Listener {
         for (CommandRestriction restriction : restrictions) {
             if (restriction.restricts(event.getMessage(), craftToUse)) {
                 event.setCancelled(true);
+                event.getPlayer().sendMessage(Component.text("Required sign not found aboard craft!"));
                 return;
             }
         }
