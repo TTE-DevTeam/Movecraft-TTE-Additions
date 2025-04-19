@@ -13,7 +13,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.xenondevs.inventoryaccess.component.AdventureComponentWrapper;
 import xyz.xenondevs.invui.gui.Gui;
@@ -24,7 +23,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.SimpleItem;
 import xyz.xenondevs.invui.window.Window;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,7 +40,7 @@ public final class CraftTypeMergeInfoCommand {
         commands.register(
             Commands.literal("crafttypeinfo")
                 .requires(source -> source.getSender() instanceof Player)
-                .requires(source -> source.getSender().hasPermission("tteadditions.crafttypeinfo"))
+                .requires(source -> source.getSender().hasPermission("tteadditions.command.crafttypeinfo"))
                 .executes(commandSourceStack -> {
                     commandSourceStack.getSource().getSender().sendMessage(Component.text("At least one crafttype must be given!"));
                     return Command.SINGLE_SUCCESS;
@@ -121,10 +120,11 @@ public final class CraftTypeMergeInfoCommand {
         List<Item> items = materialSet.stream()
                 .filter(material -> material.isItem())
                 .map(material -> new SimpleItem(new ItemBuilder(material)))
+                .sorted(Comparator.comparing(a -> a.getItemProvider().get().getType().name()))
                 .collect(Collectors.toUnmodifiableList());
 
         Gui gui = PagedGui.items()
-                .setStructure(Layouts.PAGED_WITH_TITLE_4_ROWS)
+                .setStructure(Layouts.PAGED_WITH_TITLE_6_ROWS)
                 .addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL)
                 .addIngredient('#', new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName("")))
                 .addIngredient('<', new BackButton())
