@@ -8,14 +8,14 @@ import xyz.xenondevs.invui.item.impl.controlitem.PageItem;
 public class ForwardButton extends PageItem {
 
     public ForwardButton() {
-        super(false);
+        super(true);
     }
 
     @Override
     public ItemProvider getItemProvider(PagedGui<?> pagedGui) {
         ItemBuilder builder = new ItemBuilder(PlayerHeads.ARROW_RIGHT);
         builder.addLoreLines(pagedGui.hasNextPage()
-                ? "Go to page " + pagedGui.getCurrentPage() + "/" + pagedGui.getPageAmount()
+                ? "Go to page " + (pagedGui.getCurrentPage() + 2) + "/" + pagedGui.getPageAmount()
                 : "There are no more pages");
         return builder;
     }
