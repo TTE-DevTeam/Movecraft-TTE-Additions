@@ -1,37 +1,37 @@
 CommandRestrictions:
   - ==: CommandRestriction
     Command: "/cruise"
-    ValidationRegEx: "cruise (NORTH)|(N)|(EAST)|(E)|(SOUTH)|(S)|(WEST)|(W)|(ON).*"
+    ValidationRegEx: "\/CRUISE (NORTH)|(N)|(EAST)|(E)|(SOUTH)|(S)|(WEST)|(W)|(ON)( .*)?"
     PossibleSigns:
       - "net.countercraft.movecraft.sign.CruiseSign"
   - ==: CommandRestriction
     Command: "/cruise"
-    ValidationRegEx: "cruise (UP)|(U).*"
+    ValidationRegEx: "\/CRUISE (UP)|(U)( .*)?"
     PossibleSigns:
       - "net.countercraft.movecraft.sign.AscendSign"
   - ==: CommandRestriction
     Command: "/cruise"
-    ValidationRegEx: "cruise (DOWN)|(D).*"
+    ValidationRegEx: "\/CRUISE (DOWN)|(D)( .*)?"
     PossibleSigns:
       - "net.countercraft.movecraft.sign.DescendSign"
   - ==: CommandRestriction
     Command: "/scuttle"
-    ValidationRegEx: "scuttle"
+    ValidationRegEx: "\/SCUTTLE"
     PossibleSigns:
       - "net.countercraft.movecraft.sign.ScuttleSign"
   - ==: CommandRestriction
     Command: "/rotate"
-    ValidationRegEx: "rotate (LEFT)|(RIGHT).*"
+    ValidationRegEx: "\/ROTATE (LEFT)|(RIGHT)( .*)?"
     PossibleSigns:
       - "net.countercraft.movecraft.sign.HelmSign"
   - ==: CommandRestriction
     Command: "/contacts"
-    ValidationRegEx: "contacts.*"
+    ValidationRegEx: "\/CONTACTS( \d)?"
     PossibleSigns:
       - "net.countercraft.movecraft.features.contacts.ContactsSign"
   - ==: CommandRestriction
     Command: "/craftinfo"
-    ValidationRegEx: "craftinfo"
+    ValidationRegEx: "\/CRAFTINFO( .*)?"
     PossibleSigns:
       - "net.countercraft.movecraft.features.status.StatusSign"
       - "de.dertoaster.movecrafttteadditions.sign.IntegritySign"
