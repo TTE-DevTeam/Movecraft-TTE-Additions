@@ -14,7 +14,7 @@ public class ForwardButton extends PageItem {
     @Override
     public ItemProvider getItemProvider(PagedGui<?> pagedGui) {
         ItemBuilder builder = new ItemBuilder(PlayerHeads.ARROW_RIGHT);
-        builder.addLoreLines(pagedGui.hasPreviousPage()
+        builder.addLoreLines(pagedGui.hasNextPage()
                 ? "Go to page " + pagedGui.getCurrentPage() + "/" + pagedGui.getPageAmount()
                 : "There are no more pages");
         return builder;
