@@ -28,6 +28,8 @@ public class SignsOnCraftUtil {
             SignListener.SignWrapper[] wrappers = SignListener.INSTANCE.getSignWrappers(sign, true);
             for (SignListener.SignWrapper wrapper : wrappers) {
                 AbstractMovecraftSign signHandler = MovecraftSignRegistry.INSTANCE.get(wrapper.line(0));
+                if (signHandler == null)
+                    continue;
                 result.add(signHandler.getClass());
             }
 
