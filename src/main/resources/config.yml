@@ -28,7 +28,7 @@ CommandRestrictions:
     Command: "contacts"
     ValidationRegEx: "contacts.*"
     PossibleSigns:
-      - "net.countercraft.movecraft.sign.ContactsSign"
+      - "net.countercraft.movecraft.features.contacts.ContactsSign"
   - ==: CommandRestriction
     Command: "craftinfo"
     ValidationRegEx: "craftinfo"
