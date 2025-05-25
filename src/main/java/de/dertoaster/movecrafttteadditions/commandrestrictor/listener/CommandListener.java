@@ -27,7 +27,11 @@ public class CommandListener implements Listener {
         }
         Craft craftToUse = playerCraft;
         if (playerCraft != null) {
-            craftToUse = (Craft) MathUtils.craftsNearLocFast(craftsInWorld, player.getLocation()).toArray()[0];
+            Set<Craft> craftsAtLoc = MathUtils.craftsNearLocFast(craftsInWorld, player.getLocation());
+            if (craftsAtLoc.isEmpty()) {
+                return;
+            }
+            craftToUse = (Craft) craftsAtLoc.toArray()[0];
         }
         // Unnecessary, but doesnt really hurt
         if (craftToUse == null) {
